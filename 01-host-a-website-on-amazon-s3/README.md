@@ -100,28 +100,34 @@ Another way of controlling access to our buckets are **BUCKET POLICIES**.
 }
 ```
 
-- Th*nks to this policy, no one, not ev*n i can delete the file `index.htm*`.
+- Thanks to this policy, no one, not even i can delete the file `index.htm*`.
 
 ---
 
 ## Deleting Resources
 
-- *ince we need to delete our resourc*s, first go to bucket policy and d*lete it.
+### Why can't we delete the bucket yet?
+
+Thanks to this policy, no one, not even I, can delete the file `index.html`.
+
+### Remove the Bucket Policy
+
+Since we need to delete our resources, first go to **Bucket Policy** and delete it.
 
 ### Delete Objects
 
-- In***Objects** tab.
-- Select both obj*cts, `index.html` and folder `imag*`.
-- Click button **Delete**.
-- Co*firm it by typing `delete`.
-- Clic* in orange button **Delete Objects**.
+1. Open the **Objects** tab.
+2. Select both objects: `index.html` and the `images/` folder.
+3. Click **Delete**.
+4. Confirm by typing `delete`.
+5. Click the orange **Delete Objects** button.
 
-### Delete Bucket
+### Delete the Bucket
 
-- In **Buck*ts**.
-- Select our bucket.
-- Click*button **Delete**.
-- Confirm it by*typing `permanently delete`.
-- Cli*k in orange button **Delete Objects**.
+1. Go to **Buckets**.
+2. Select your bucket.
+3. Click **Delete**.
+4. Confirm by typing `permanently delete`.
+5. Click the orange **Delete Bucket** button.
 
-✅ Everything is deleted.
+✅ Everything has been successfully deleted.
