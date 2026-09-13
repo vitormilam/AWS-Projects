@@ -1,86 +1,159 @@
 # Host a Website on Amazon S3
 
-<p>
+<p align="center">
   <img src="./representation.png" width="500">
 </p>
 
-
-This project demonstrates how to host a static website on Amazon S3 by creating a bucket, uploading website files, and configuring static website hosting.
+This project demonstrates how to host a **static website using Amazon S3** by creating an S3 bucket, uploading website files, configuring static website hosting, managing public access, and applying a bucket policy.
 
 ---
 
-## Create a bucket in Amazon S3
+## 📦 Create an S3 Bucket
 
-- Pick the closest region to you since it's best practice because it reduces latency and cost.
+The first step is to create an S3 bucket to store the website files.
+
+> **Best practice:** Choose an AWS Region geographically close to your users to help reduce latency.
 
 ### Steps
 
-1. Open S3.
-2. Create a bucket to store website files.
+1. Open **Amazon S3**.
+2. Select **General Purpose Buckets**.
+3. Click **Create bucket**.
+4. Configure the bucket with the following settings:
 
-- Open S3 → Click in Category: **General Purpose Buckets**
-- Create Bucket
-- Bucket type: **General purpose**
-- Bucket name: **website-project-vitor**
-- Object Ownsership: **ACLs enabled**
+* **Bucket type:** General purpose
+* **Bucket name:** `website-project-vitor`
+* **Object Ownership:** ACLs enabled
+* **Block all public access:** Disabled
+* **Bucket Versioning:** Enabled
 
-### What's ACL (Access Control List)?
+<p>
+  <img src="./prints_projeto1/project_print_8.png" width="800">
+</p>
 
-- It's a way to configure permission settings inside a bucket. We enable ACLs so we can control access to our website files later.
+### What is an ACL?
 
-- *Turn Off* **Block all public access** in Block Public Access settings for this bucket.
-- Click in yellow box saying that you acknowledge that you're turning off.
-- Bucket Versioning: **Enable**
-- Click in **Create Bucket**.
+An **Access Control List (ACL)** is a mechanism used by Amazon S3 to manage access permissions for buckets and objects.
 
----
+For this project, ACLs were enabled so that object-level public access could be configured later.
 
-## Upload website content to our bucket
+> **Note:** For modern AWS architectures, AWS generally recommends disabling ACLs and using IAM and bucket policies to manage access whenever possible.
 
-- In Bucket category, click in the bucket *website-project-vitor* that we have created.
-- In our bucket, click in the orange button **UPLOAD**.
-- Click in **ADD FILES** and import `index.html`.
-- After importing `index.html`, click in **ADD FOLDER** and import `images` folder.
+### Block Public Access
 
-> **BOTH ARE STORED INSIDE THIS PROJECT FOLDER**
+S3 buckets are private by default.
 
-- Click in the orange button **UPLOAD** to upload everything to our S3 bucket.
+For this project, **Block all public access** was disabled so the website could be accessed publicly through the S3 website endpoint.
 
----
-
-## Configure a static website on Amazon S3
-
-- In our bucket page, go to section **PROPERTIES**.
-- In painel **STATIC WEBSITE HOSTING**, click in **EDIT**.
-
-- Click to **ENABLE** in Static Website Hosting.
-- In index document, add the name of the html file, in this case, the name is `index.html`.
-- Go down and click in the orange button **SAVE CHANGES**.
+When disabling this option, AWS displays a warning requiring confirmation that public access may be granted.
 
 ---
 
-## Make objects in your S3 bucket profile PUBLIC
+## 📤 Upload Website Content
 
-- After creating and storing objects in our S3 Bucket, we can scroll down and see the link for our endpoint.
-- Despiting turning off **BLOCK ALL PUBLIC ACCESS**, our objects are private by default so we have fix this so we can see access our website though the endpoint.
+After creating the bucket, the website files need to be uploaded.
 
 ### Steps
 
-- In **Objects** tab.
-- Select the checkbox for both, `indext.html` file and folder `images`.
-- Click in the blue button **ACTIONS** and select **MAKE PUBLIC USING ACL**.
-- It will ask for confirmation before making the change, just click in **MAKE PUBLIC**.
+1. Open the `website-project-vitor` bucket.
+2. Go to the **Objects** tab.
+3. Click **Upload**.
+4. Click **Add files** and upload:
 
-- Now you can access your website hosted in the S3 bucket.
+```text
+index.html
+```
+
+5. Click **Add folder** and upload the:
+
+```text
+images/
+```
+
+folder.
+
+The bucket structure should look similar to:
+
+```text
+website-project-vitor/
+│
+├── index.html
+│
+└── images/
+    ├── image1.png
+    ├── image2.png
+    └── ...
+```
+
+> **Note:** S3 does not have traditional folders. `images/` is a prefix used to organize objects.
+
+<p>
+  <img src="./prints_projeto1/project_print_7.png" width="800">
+</p>
+
+Click **Upload** to upload the website content to the bucket.
 
 ---
 
-## Bucket Policies
+## 🌐 Configure Static Website Hosting
 
-Another way of controlling access to our buckets are **BUCKET POLICIES**.
+Amazon S3 can be used to host static websites directly from a bucket.
 
-- Go to tab **Permissions**, in **Bucket Policy** area.
-- Click in **Add** and paste this policy written in JSON.
+### Steps
+
+1. Open the `website-project-vitor` bucket.
+2. Go to the **Properties** tab.
+3. Find **Static website hosting**.
+4. Click **Edit**.
+5. Enable **Static website hosting**.
+6. Under **Index document**, enter:
+
+```text
+index.html
+```
+
+7. Click **Save changes**.
+
+<p>
+  <img src="./prints_projeto1/project_print_6.png" width="800">
+</p>
+
+After enabling static website hosting, S3 provides a **website endpoint** that can be used to access the website.
+
+---
+
+## 🔓 Make Website Objects Public
+
+Disabling **Block all public access** does not automatically make the objects inside the bucket public.
+
+Additional permissions are required.
+
+For this project, I used **S3 object ACLs** to make the website content publicly accessible.
+
+### Steps
+
+1. Go to the **Objects** tab.
+2. Select the `index.html` object.
+3. Select the website image objects inside the `images/` prefix.
+4. Click **Actions**.
+5. Select **Make public using ACL**.
+6. Confirm by clicking **Make public**.
+
+<p>
+  <img src="./prints_projeto1/project_print_5.png" width="800">
+</p>
+
+After the objects have public read access, the website can be accessed through the S3 website endpoint.
+
+---
+
+## 🔐 Bucket Policies
+
+Another way to control access to S3 resources is through **Bucket Policies**.
+
+A bucket policy is a JSON-based resource policy that defines which actions are allowed or denied for specific resources and principals.
+
+For this project, I created a policy that prevents deletion of the `index.html` object.
 
 ### JSON Policy
 
@@ -90,7 +163,7 @@ Another way of controlling access to our buckets are **BUCKET POLICIES**.
   "Id": "MyBucketPolicy",
   "Statement": [
     {
-      "Sid": "BucketPutDelete",
+      "Sid": "DenyIndexDeletion",
       "Effect": "Deny",
       "Principal": "*",
       "Action": "s3:DeleteObject",
@@ -100,34 +173,99 @@ Another way of controlling access to our buckets are **BUCKET POLICIES**.
 }
 ```
 
-- Thanks to this policy, no one, not even i can delete the file `index.htm*`.
+### What does this policy do?
+
+The policy explicitly denies the `s3:DeleteObject` action for:
+
+```text
+arn:aws:s3:::website-project-vitor/index.html
+```
+
+This demonstrates an important AWS security concept:
+
+> **An explicit Deny takes precedence over an Allow.**
+
+The policy prevents the object from being deleted while the policy remains in place.
 
 ---
 
-## Deleting Resources
+## 🗑️ Delete the Resources
 
-### Why can't we delete the bucket yet?
-
-Thanks to this policy, no one, not even I, can delete the file `index.html`.
+After completing the project, I removed the AWS resources to avoid unnecessary charges.
 
 ### Remove the Bucket Policy
 
-Since we need to delete our resources, first go to **Bucket Policy** and delete it.
+Before deleting the website content, the bucket policy must be removed.
 
-### Delete Objects
+### Steps
+
+1. Open the bucket.
+2. Go to **Permissions**.
+3. Find **Bucket policy**.
+4. Delete the policy.
+
+<p>
+  <img src="./prints_projeto1/project_print_3.png" width="800">
+</p>
+
+---
+
+## 🧹 Delete the Objects
+
+After removing the bucket policy, the website objects can be deleted.
+
+### Steps
 
 1. Open the **Objects** tab.
-2. Select both objects: `index.html` and the `images/` folder.
-3. Click **Delete**.
-4. Confirm by typing `delete`.
-5. Click the orange **Delete Objects** button.
+2. Select `index.html`.
+3. Select the objects inside the `images/` prefix.
+4. Click **Delete**.
+5. Confirm the deletion.
+6. Type:
 
-### Delete the Bucket
+```text
+delete
+```
+
+7. Click **Delete objects**.
+
+<p>
+  <img src="./prints_projeto1/project_print_2.png" width="800">
+</p>
+
+### ⚠️ S3 Versioning
+
+Because **Bucket Versioning** was enabled, deleting an object may create a **delete marker** instead of permanently removing all versions of that object.
+
+If the bucket cannot be deleted, all object versions and delete markers may need to be removed first.
+
+---
+
+## 🗑️ Delete the S3 Bucket
+
+Once all objects and versions have been removed, the bucket can be deleted.
+
+### Steps
 
 1. Go to **Buckets**.
-2. Select your bucket.
+2. Select `website-project-vitor`.
 3. Click **Delete**.
-4. Confirm by typing `permanently delete`.
-5. Click the orange **Delete Bucket** button.
+4. Confirm by typing:
 
-✅ Everything has been successfully deleted.
+```text
+permanently delete
+```
+
+5. Click **Delete bucket**.
+
+<p>
+  <img src="./prints_projeto1/project_print_1.png" width="800">
+</p>
+
+---
+
+# ✅ Project Completed
+
+
+
+
