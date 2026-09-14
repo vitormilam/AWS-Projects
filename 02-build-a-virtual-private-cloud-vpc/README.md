@@ -13,7 +13,8 @@ This project demonstrates how to build a Virtual Private Cloud (VPC).
 
 ---
 
-## 1. Create an Amazon VPC
+
+## 1.0 Create an Amazon VPC
 
 
 Explainging the Network part:
@@ -47,7 +48,7 @@ CIDR block = A range of houses in my neighborhood
 
 ---
 
-## 2. Create a public subnet
+## 1.1 Create a public subnet
 
 - Click in Subnets tab -> Create Subnet
 - In VPC ID, select the VPC that we just create, in this case, Vitor-VPC.
@@ -61,7 +62,28 @@ Next Step:
 - In the Actions button, ckick in Edit subnet settings.
 - In Auto-assign IP settings, click in "Enable-assign public IPv4 Address -> Click in Save.
 
+Explanation:
+- Subnets are subsections of my VPC, just like how neighbourhoods are subsections of a city.
+- There are already subnets existing in my account, one for every Availability Azone in the Region that i've set up my VPC in.
+- I named my subnet Public 1, but that doesn't automatically make my subnet a public subnet.
+    - For a subnet to be considered public, it has to be connected to an internet gateway.
+
+What's the difference between a Public Subnet and a Private Subnet ?
+R:
+
 
 ---
 
-## 3. Create an Internet Gateway
+## 1.2 Create an Internet Gateway
+
+What's an Internet Gateway ?
+R:
+
+- Click in Internet Gateways -> Click in Create internet gateway.
+- In the Name tag, the name should be "Vitor IG".
+- In Tags, key should be "Name" and value should be "Vitor IG".
+- Click in the created Internet Gateway "Vitor IG" -> Go to Actions and click in Attach to VPC.
+- In available VPCs, select the VPC that we have created, in this case, Vitor-VPC ans click in the orange button Attach internet Gateway.
+
+
+
