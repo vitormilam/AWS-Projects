@@ -1,89 +1,271 @@
 # Build a Virtual Private Cloud (VPC)
 
 <p align="center">
-  <img src="" width="500">
+  <img src="./project2-representation.png" width="500">
 </p>
 
-This project demonstrates how to build a Virtual Private Cloud (VPC).
+A VPC is a logically isolated network inside AWS where resources such as EC2 instances, databases, and load balancers can be deployed securely.
 
-- VPCs are isolated sections of the AWS Cloud that help to keep my AWS resources private and secure.
-- There was already a default VPC Iin my account ever sice my AWS account was created.
-- This is because AWS has set up a default VPC to allow me to deploy resources like EC2 instances / RDS databases right away - without having to create my own VPC from scratch.
-- To set up my VPC, i had to define an IPv4 CIDR, which means a range of IP addresses that my VPC can allocate to the resources deployed into my VPC.
+Some key concepts learned during this project:
+
+- VPCs are isolated sections of the AWS Cloud that help keep AWS resources private and secure.
+- AWS automatically creates a **default VPC** when an account is created.
+- The default VPC allows resources such as EC2 instances and RDS databases to be launched immediately without creating a custom network.
+- When creating a custom VPC, an **IPv4 CIDR Block** must be defined. This CIDR block determines the range of IP addresses available for resources deployed inside the VPC.
 
 ---
 
+## 🌐 Understanding VPC Networking
 
-## 1.0 Create an Amazon VPC
+Before creating a VPC, it is important to understand a few networking concepts.
 
+### What is an IP Address?
 
-Explainging the Network part:
+An **IP address (Internet Protocol Address)** is a unique identifier assigned to a device on a network.
 
-What's a IP address and Why do i need to configure this?
-R:
-
-What does IPV4 mean?
-R: 
-
-What's CIDR block ?
-R: 
-
-- Open VPC tab -> Your VPCs
+Just as a physical address identifies a house in a city, an IP address identifies a resource on a network.
 
 Example:
-VPC = My city
-IP = Number of the house
-Subnet = It's a neighborhood inside my city (VPC).
-CIDR block = A range of houses in my neighborhood
 
-- Click in Create VPC
-    - In VPC Settings, select:
-        - VPC Only
-        - In nametag, write: Vitor-VPC
-        - IPv4 CIDR Block: IPv4 CIDR manual input
-        - IPv4 CIDR: 10.0.0.0/16
-    
-    Click in CREATE VPC
+```text
+10.0.0.15
+```
 
+### What is IPv4?
+
+**IPv4 (Internet Protocol Version 4)** is the most commonly used IP addressing system.
+
+IPv4 addresses consist of four numbers separated by periods.
+
+Example:
+
+```text
+10.0.0.1
+```
+
+AWS VPCs commonly use private IPv4 ranges such as:
+
+```text
+10.0.0.0/16
+172.16.0.0/12
+192.168.0.0/16
+```
+
+### What is a CIDR Block?
+
+**CIDR (Classless Inter-Domain Routing)** is a notation used to define a range of IP addresses.
+
+Example:
+
+```text
+10.0.0.0/16
+```
+
+The `/16` indicates how much of the IP address represents the network portion.
+
+This CIDR block provides approximately:
+
+```text
+65,536 IP addresses
+```
+
+that can be allocated within the VPC.
+
+### VPC Analogy
+
+```text
+VPC            = A city
+Subnet         = A neighborhood
+IP Address     = A house address
+CIDR Block     = A range of houses
+Internet Gateway = The road connecting the city to the outside world
+```
 
 ---
 
-## 1.1 Create a public subnet
+## 🏗️ Create an Amazon VPC
 
-- Click in Subnets tab -> Create Subnet
-- In VPC ID, select the VPC that we just create, in this case, Vitor-VPC.
-- In IPv4 subnet CIDR block, type 10.0.0.0/24 
-- In Tags, add one tag, the key should be "Name" and the value shoud be "Public 1"
-- Click in Create Subnet
+The first step is to create a custom VPC.
 
-Next Step:
+### Steps
 
-- Select the public subnet that we created.
-- In the Actions button, ckick in Edit subnet settings.
-- In Auto-assign IP settings, click in "Enable-assign public IPv4 Address -> Click in Save.
+1. Open **Amazon VPC**.
+2. Select **Your VPCs**.
+3. Click **Create VPC**.
+4. Under **VPC Settings**, configure:
 
-Explanation:
-- Subnets are subsections of my VPC, just like how neighbourhoods are subsections of a city.
-- There are already subnets existing in my account, one for every Availability Azone in the Region that i've set up my VPC in.
-- I named my subnet Public 1, but that doesn't automatically make my subnet a public subnet.
-    - For a subnet to be considered public, it has to be connected to an internet gateway.
+- **Resources to create:** VPC only
+- **Name tag:** `Vitor-VPC`
+- **IPv4 CIDR block:** IPv4 CIDR manual input
+- **IPv4 CIDR:** `10.0.0.0/16`
 
-What's the difference between a Public Subnet and a Private Subnet ?
-R:
+5. Click **Create VPC**.
 
+<p>
+  ./prints_projeto_vpc/project_print_1.png
+</p>
+
+### Why use 10.0.0.0/16?
+
+The CIDR block:
+
+```text
+10.0.0.0/16
+```
+
+provides a large private IP range that can later be divided into multiple subnets.
+
+> **Best Practice:** Plan your CIDR ranges before deploying resources. Expanding or changing network ranges later can be difficult in production environments.
 
 ---
 
-## 1.2 Create an Internet Gateway
+## 📍 Create a Public Subnet
 
-What's an Internet Gateway ?
-R:
+Subnets divide a VPC into smaller network segments.
 
-- Click in Internet Gateways -> Click in Create internet gateway.
-- In the Name tag, the name should be "Vitor IG".
-- In Tags, key should be "Name" and value should be "Vitor IG".
-- Click in the created Internet Gateway "Vitor IG" -> Go to Actions and click in Attach to VPC.
-- In available VPCs, select the VPC that we have created, in this case, Vitor-VPC ans click in the orange button Attach internet Gateway.
+### Steps
+
+1. Open **Subnets**.
+2. Click **Create subnet**.
+3. Configure:
+
+- **VPC ID:** `Vitor-VPC`
+- **Subnet name:** `Public 1`
+- **IPv4 subnet CIDR block:** `10.0.0.0/24`
+
+4. Click **Create subnet**.
+
+<p>
+  ./prints_projeto_vpc/project_print_2.png
+</p>
+
+### Configure Public IP Assignment
+
+1. Select the subnet.
+2. Click **Actions**.
+3. Select **Edit subnet settings**.
+4. Enable:
+
+```text
+Auto-assign public IPv4 address
+```
+
+5. Click **Save**.
+
+<p>
+  ./prints_projeto_vpc/project_print_3.png
+</p>
+
+### What is a Subnet?
+
+Subnets are subdivisions of a VPC, just like neighborhoods are subdivisions of a city.
+
+Example:
+
+```text
+VPC CIDR:     10.0.0.0/16
+Subnet CIDR:  10.0.0.0/24
+```
+
+The subnet receives a smaller portion of the VPC's available address space.
+
+### Public vs Private Subnets
+
+#### Public Subnet
+
+A public subnet:
+
+- Can communicate directly with the internet.
+- Has a route to an Internet Gateway.
+- Typically hosts web servers and load balancers.
+
+#### Private Subnet
+
+A private subnet:
+
+- Cannot be accessed directly from the internet.
+- Is commonly used for databases and backend applications.
+- Requires a NAT Gateway if outbound internet access is needed.
+
+> **Important:** Naming a subnet "Public" does not automatically make it public. It must have a route to an Internet Gateway.
+
+---
+
+## 🌍 Create an Internet Gateway
+
+### What is an Internet Gateway?
+
+An **Internet Gateway (IGW)** is a VPC component that allows communication between resources inside a VPC and the public internet.
+
+Think of an Internet Gateway as the highway connecting your city (VPC) to the outside world.
+
+### Steps
+
+1. Open **Internet Gateways**.
+2. Click **Create internet gateway**.
+3. Configure:
+
+- **Name tag:** `Vitor IG`
+
+4. Add the tag:
+
+```text
+Key: Name
+Value: Vitor IG
+```
+
+5. Click **Create internet gateway**.
 
 
+
+1. Select **Vitor IG**.
+2. Click **Actions**.
+3. Select **Attach to VPC**.
+4. Select:
+
+```text
+Vitor-VPC
+```
+
+5. Click **Attach Internet Gateway**.
+
+
+
+Creating and attaching an Internet Gateway does not automatically provide internet access.
+
+A route table must tell AWS where internet-bound traffic should be sent.
+
+### Steps
+
+1. Open **Route Tables**.
+2. Select the route table associated with **Vitor-VPC**.
+3. Open the **Routes** tab.
+4. Click **Edit routes**.
+5. Click **Add route**.
+
+Configure:
+
+```text
+Destination: 0.0.0.0/0
+Target: Vitor IG
+```
+
+6. Click **Save changes**.
+
+
+0.0/0 mean?
+
+```text
+0.0.0.0/0
+```
+
+represents all IPv4 addresses.
+
+This route tells AWS:
+
+> Any traffic that is not intended for resources within the VPC should be sent to the Internet Gateway.
+
+---
+
+# ✅ Project Completed
 
