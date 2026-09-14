@@ -101,9 +101,7 @@ The first step is to create a custom VPC.
 
 5. Click **Create VPC**.
 
-<p>
-  ./prints_projeto_vpc/project_print_1.png
-</p>
+
 
 ### Why use 10.0.0.0/16?
 
@@ -114,8 +112,6 @@ The CIDR block:
 ```
 
 provides a large private IP range that can later be divided into multiple subnets.
-
-> **Best Practice:** Plan your CIDR ranges before deploying resources. Expanding or changing network ranges later can be difficult in production environments.
 
 ---
 
@@ -186,8 +182,6 @@ A private subnet:
 - Cannot be accessed directly from the internet.
 - Is commonly used for databases and backend applications.
 - Requires a NAT Gateway if outbound internet access is needed.
-
-> **Important:** Naming a subnet "Public" does not automatically make it public. It must have a route to an Internet Gateway.
 
 ---
 
