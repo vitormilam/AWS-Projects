@@ -131,9 +131,6 @@ Subnets divide a VPC into smaller network segments.
 
 4. Click **Create subnet**.
 
-<p>
-  ./prints_projeto_vpc/project_print_2.png
-</p>
 
 ### Configure Public IP Assignment
 
@@ -148,9 +145,6 @@ Auto-assign public IPv4 address
 
 5. Click **Save**.
 
-<p>
-  ./prints_projeto_vpc/project_print_3.png
-</p>
 
 ### What is a Subnet?
 
